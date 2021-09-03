@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 /**
  * These eslint exceptions must be there because we are rendering a generic
- * component, therefore we don't know the specifics props that component has.
+ * component with the PrivateRoute component, therefore we don't know the specifics props that component has.
  */
 import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
