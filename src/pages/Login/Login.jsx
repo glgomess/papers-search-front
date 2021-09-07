@@ -56,59 +56,61 @@ export default function Login() {
   }
 
   return (
-    <Grid>
-      <Row>
-        <Column lg={{ span: 8, offset: 2 }}>
-          <h3 className="title">
-            Welcome to the HCI Papers Search and Analysis Platform!
-          </h3>
-        </Column>
-      </Row>
-      <Row>
-        <Column lg={{ span: 4, offset: 4 }}>
-          <Tile className="tile">
-            <h4 className="form-title">Login</h4>
-            <TextInput
-              labelText="Username"
-              onChange={(e) => setUsername(e.target.value)}
-              invalid={invalidInputs.username}
-              invalidText="Please check your username."
-            />
-            <PasswordInput
-              labelText="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              invalid={invalidInputs.password}
-              invalidText="Please check your password."
-            />
-            {validatingUser ? (
-              <InlineLoading />
-            ) : (
-              <Button
-                size="small"
-                className="login-button"
-                onClick={validateInputs}
-              >
-                Login
-              </Button>
-            )}
+    <div className="background-gradient">
+      <Grid>
+        <Row>
+          <Column lg={{ span: 8, offset: 2 }}>
+            <h3 className="title">
+              Welcome to the HCI Papers Search and Analysis Platform!
+            </h3>
+          </Column>
+        </Row>
+        <Row>
+          <Column lg={{ span: 4, offset: 4 }}>
+            <Tile className="tile">
+              <h4 className="form-title">Login</h4>
+              <TextInput
+                labelText="Email"
+                onChange={(e) => setUsername(e.target.value)}
+                invalid={invalidInputs.username}
+                invalidText="Please check your username."
+              />
+              <PasswordInput
+                labelText="Password"
+                onChange={(e) => setPassword(e.target.value)}
+                invalid={invalidInputs.password}
+                invalidText="Please check your password."
+              />
+              {validatingUser ? (
+                <InlineLoading />
+              ) : (
+                <Button
+                  size="small"
+                  className="login-button"
+                  onClick={validateInputs}
+                >
+                  Login
+                </Button>
+              )}
 
-            <Link
-              className="recover-link"
-              href="#"
-              onClick={(e) => e.preventDefault()}
-            >
-              <RouterLink to="/recover">Forgot password?</RouterLink>
-            </Link>
-            <Link
-              className="new-account-link"
-              href="#"
-              onClick={(e) => e.preventDefault()}
-            >
-              <RouterLink to="/signup">Create new account</RouterLink>
-            </Link>
-          </Tile>
-        </Column>
-      </Row>
-    </Grid>
+              <Link
+                className="recover-link"
+                href="#"
+                onClick={(e) => e.preventDefault()}
+              >
+                <RouterLink to="/recover">Forgot password?</RouterLink>
+              </Link>
+              <Link
+                className="new-account-link"
+                href="#"
+                onClick={(e) => e.preventDefault()}
+              >
+                <RouterLink to="/signup">Create new account</RouterLink>
+              </Link>
+            </Tile>
+          </Column>
+        </Row>
+      </Grid>
+    </div>
   );
 }
