@@ -9,6 +9,7 @@ import {
   InlineLoading,
   Button,
 } from 'carbon-components-react';
+import { useHistory } from 'react-router-dom';
 import useSignup from './hooks/useSignup';
 import './signup.scss';
 // import { Link as RouterLink } from 'react-router-dom';
@@ -18,7 +19,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [validatingUser, setValidatingUser] = useState(false);
   const [invalidInputs, setInvalidInputs] = useState({
     firstName: false,
     lastName: false,
@@ -26,7 +26,8 @@ export default function Login() {
     email: false,
   });
 
-  const { signup } = useSignup();
+  const { signup, error, signingUp, errorMessage, signupSuccess } = useSignup();
+  const history = useHistory();
 
   /**
    *
@@ -77,12 +78,15 @@ export default function Login() {
     return true;
   }
 
-  function validateAndSignup() {
+  async function validateAndSignup() {
     if (!validateInputs()) {
       return;
     }
-    signup();
-    setValidatingUser(true);
+    await signup({ email, password, firstName, lastName });
+
+    setTimeout(() => {
+      history.push('/');
+    }, 2000);
   }
 
   return (
@@ -104,7 +108,7 @@ export default function Login() {
                   labelText="First Name"
                   invalid={invalidInputs.firstName}
                   invalidText="Please type your name."
-                  maxLength="20"
+                  maxLength="50"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                 />
@@ -114,7 +118,7 @@ export default function Login() {
                   labelText="Last Name"
                   invalid={invalidInputs.lastName}
                   invalidText="Please type your last name."
-                  maxLength="20"
+                  maxLength="50"
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
@@ -123,7 +127,7 @@ export default function Login() {
                   labelText="Email"
                   invalid={invalidInputs.email}
                   invalidText="Please type your email correctly."
-                  maxLength="30"
+                  maxLength="200"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
@@ -136,17 +140,29 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              {validatingUser ? (
+              {signingUp ? (
                 <InlineLoading />
               ) : (
-                <Button
-                  size="small"
-                  className="login-button"
-                  onClick={validateAndSignup}
-                >
-                  Register
-                </Button>
+                <>
+                  <Button size="small" onClick={validateAndSignup}>
+                    Register
+                  </Button>
+                  <Button
+                    size="small"
+                    className="go_back-button"
+                    onClick={() => history.goBack()}
+                    kind="secondary"
+                  >
+                    Back
+                  </Button>
+                </>
               )}
+              {error ? (
+                <span className="signup-error">{errorMessage}</span>
+              ) : null}
+              {signupSuccess ? (
+                <span className="signup-success">Successfully registered!</span>
+              ) : null}
             </Tile>
           </Column>
         </Row>
