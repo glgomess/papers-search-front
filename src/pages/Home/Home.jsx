@@ -1,28 +1,18 @@
 import React from 'react';
-import {
-  HeaderContainer,
-  Header,
-  HeaderMenuButton,
-  HeaderName,
-  HeaderNavigation,
-  HeaderMenuItem,
-} from 'carbon-components-react';
+import { Grid } from 'carbon-components-react';
+import { Content } from 'carbon-components-react/lib/components/UIShell';
+import Header from '../../components/index';
+import ArticlesFilter from './ArticlesFilter';
 
-export default function Login() {
+export default function Home() {
   return (
-    <HeaderContainer
-      render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-        <Header>
-          <HeaderMenuButton
-            onClick={onClickSideNavExpand}
-            isActive={isSideNavExpanded}
-          />
-          <HeaderName prefix="HCI">Papers Search</HeaderName>
-          <HeaderNavigation>
-            <HeaderMenuItem>Articles</HeaderMenuItem>
-          </HeaderNavigation>
-        </Header>
-      )}
-    />
+    <>
+      <Header />
+      <Content>
+        <Grid>
+          <ArticlesFilter />
+        </Grid>
+      </Content>
+    </>
   );
 }
