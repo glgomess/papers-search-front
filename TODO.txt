@@ -1,0 +1,3 @@
+Arrumar problema com o cookie
+Ligar o isAuthenticated com o cookie
+Criar provider para o user logado
