@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextInput,
   Tile,
@@ -16,16 +16,22 @@ import useLogin from './hooks/useLogin';
 import './login.scss';
 
 export default function Login() {
-  const { validateLogin } = useLogin();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [invalidInputs, setInvalidInputs] = useState({
     username: false,
     password: false,
   });
-  const [validatingUser, setValidatingUser] = useState(false);
 
+  const { login, validatingUser, errorMessage, error, successfulLogin } =
+    useLogin();
   const history = useHistory();
+
+  useEffect(() => {
+    if (successfulLogin) {
+      history.push('/home');
+    }
+  }, [successfulLogin]);
 
   async function validateInputs() {
     let invalidPassword = false;
@@ -45,14 +51,7 @@ export default function Login() {
       return;
     }
 
-    try {
-      setValidatingUser(true);
-      await validateLogin(username, password);
-      setValidatingUser(false);
-      history.push('/home');
-    } catch (e) {
-      setValidatingUser(false);
-    }
+    await login(username, password);
   }
 
   return (
@@ -92,6 +91,9 @@ export default function Login() {
                   Login
                 </Button>
               )}
+              {error ? (
+                <span className="error-message">{errorMessage}</span>
+              ) : null}
 
               <Link
                 className="recover-link"
