@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextInput,
   Tile,
@@ -28,6 +28,14 @@ export default function Login() {
 
   const { signup, error, signingUp, errorMessage, signupSuccess } = useSignup();
   const history = useHistory();
+
+  useEffect(() => {
+    if (signupSuccess) {
+      setTimeout(() => {
+        history.push('/');
+      }, 1000);
+    }
+  }, [signupSuccess]);
 
   /**
    *
@@ -83,10 +91,6 @@ export default function Login() {
       return;
     }
     await signup({ email, password, firstName, lastName });
-
-    setTimeout(() => {
-      history.push('/');
-    }, 2000);
   }
 
   return (
