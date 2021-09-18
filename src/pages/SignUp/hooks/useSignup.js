@@ -18,6 +18,8 @@ export default function useSignup() {
     } catch (e) {
       if (e.response) {
         setErrorMessage(e.response.data);
+      } else {
+        setErrorMessage('An error occurred. Please try again.');
       }
       setSigningUp(false);
       setError(true);

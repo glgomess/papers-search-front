@@ -19,6 +19,8 @@ export default function useLogin() {
       setError(true);
       if (e.response) {
         setErrorMessage(e.response.data);
+      } else {
+        setErrorMessage('An error occurred. Please try again.');
       }
     }
   }

@@ -111,7 +111,7 @@ export default function Login() {
                 <TextInput
                   labelText="First Name"
                   invalid={invalidInputs.firstName}
-                  invalidText="Please type your name."
+                  invalidText="Please insert your name."
                   maxLength="50"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -121,7 +121,7 @@ export default function Login() {
                 <TextInput
                   labelText="Last Name"
                   invalid={invalidInputs.lastName}
-                  invalidText="Please type your last name."
+                  invalidText="Please insert your last name."
                   maxLength="50"
                   onChange={(e) => setLastName(e.target.value)}
                 />
@@ -130,7 +130,7 @@ export default function Login() {
                 <TextInput
                   labelText="Email"
                   invalid={invalidInputs.email}
-                  invalidText="Please type your email correctly."
+                  invalidText="Please insert a valid email."
                   maxLength="200"
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -139,7 +139,7 @@ export default function Login() {
                 <PasswordInput
                   labelText="Password"
                   invalid={invalidInputs.password}
-                  invalidText="Please type your password."
+                  invalidText="Please insert your password."
                   maxLength="20"
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -148,7 +148,11 @@ export default function Login() {
                 <InlineLoading />
               ) : (
                 <>
-                  <Button size="small" onClick={validateAndSignup}>
+                  <Button
+                    size="small"
+                    onClick={validateAndSignup}
+                    className="signup-button"
+                  >
                     Register
                   </Button>
                   <Button
@@ -162,7 +166,10 @@ export default function Login() {
                 </>
               )}
               {error ? (
-                <span className="signup-error">{errorMessage}</span>
+                <>
+                  <br />
+                  <span className="signup-error">{errorMessage}</span>
+                </>
               ) : null}
               {signupSuccess ? (
                 <span className="signup-success">Successfully registered!</span>
