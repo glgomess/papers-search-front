@@ -13,6 +13,7 @@ const backendApi = () =>
   axios.create({
     headers: { Authorization: getCookie() },
     baseURL: process.env.REACT_APP_HCI_SERVICE_URL,
+    withCredentials: true,
   });
 
 export default backendApi;
