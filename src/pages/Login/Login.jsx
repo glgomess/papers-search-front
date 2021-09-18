@@ -92,7 +92,10 @@ export default function Login() {
                 </Button>
               )}
               {error ? (
-                <span className="error-message">{errorMessage}</span>
+                <>
+                  <br />
+                  <span className="error-message">{errorMessage}</span>
+                </>
               ) : null}
 
               <Link
