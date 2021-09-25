@@ -12,7 +12,7 @@ export default function useSignup() {
     setSigningUp(true);
     setSignupSuccess(false);
     try {
-      await backendApi().post('/signup', userData);
+      await backendApi().post('/auth/signup', userData);
       setSigningUp(false);
       setSignupSuccess(true);
     } catch (e) {

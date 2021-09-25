@@ -11,7 +11,7 @@ export default function useLogin() {
     try {
       setError(false);
       setValidatingUser(true);
-      await backendApi().post('/login', { email, password });
+      await backendApi().post('/auth/login', { email, password });
       setValidatingUser(false);
       setSuccessfulLogin(true);
     } catch (e) {
