@@ -15,7 +15,19 @@ import "./articles-filter.scss";
 // eslint-disable-next-line import/no-named-as-default
 import useSearch from "./hooks/useSearch";
 
-export default function ArticlesFilter() {
+const exampleArticle = {
+	authors: ["Piccolo, Lara Schibelsky Godoy", "Baranauskas, Maria Cecília C."],
+	bookTitle:
+		"Proceedings of VII Brazilian Symposium on Human Factors in Computing Systems",
+	abstract:
+		"Taking in account the social relevance of the terrestrial TV in Brazil and the transition to the digital technology - meaning new opportunities for exploring interactivity on TV - this paper is a worldwide review of HCI studies applied to interactive TV. Organizational semiotics artifacts are used in order to identify the main questions related to the interactive TV in the Brazil scene. The main design challenges are also pointed out by this study.",
+	keywords: ["human computer interaction", "digital interactive tv"],
+};
+
+export default function ArticlesFilter({
+	updateArticleList,
+	updateIsSearching,
+}) {
 	const [filters, setFilters] = useState([]);
 	const [suggestions, setSuggestions] = useState([]);
 	const [isSearchingArticles, setIsSearchingArticles] = useState(false);
@@ -45,8 +57,12 @@ export default function ArticlesFilter() {
 		if (filters.length > 0) {
 			setShouldRenderWarningMessage(false);
 			setIsSearchingArticles(true);
+			updateIsSearching(true);
+			updateArticleList([]);
 			setTimeout(() => {
+				updateArticleList([exampleArticle]);
 				setIsSearchingArticles(false);
+				updateIsSearching(false);
 			}, 2000);
 		} else {
 			setShouldRenderWarningMessage(true);
