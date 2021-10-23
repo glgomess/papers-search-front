@@ -1,20 +1,24 @@
 import backendApi from "../../../apis/backend";
 
 export default function useSearch() {
-  async function searchKeywords(word) {
-    try {
-      const response = await backendApi().get(
-        `/elastic/search/keywords?kw=${word}`
-      );
+	async function searchKeywords(word) {
+		const response = await backendApi().get(
+			`/elastic/search/keywords?kw=${word}`
+		);
 
-      return response.data;
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
-  }
+		return response.data;
+	}
 
-  return {
-    searchKeywords,
-  };
+	async function searchArticles(filters) {
+		const response = await backendApi().get(
+			`/elastic/search/articles?keywords=${encodeURIComponent(filters)}`
+		);
+
+		return response.data;
+	}
+
+	return {
+		searchKeywords,
+		searchArticles,
+	};
 }

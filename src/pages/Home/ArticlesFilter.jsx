@@ -15,18 +15,10 @@ import "./articles-filter.scss";
 // eslint-disable-next-line import/no-named-as-default
 import useSearch from "./hooks/useSearch";
 
-const exampleArticle = {
-	authors: ["Piccolo, Lara Schibelsky Godoy", "Baranauskas, Maria Cecília C."],
-	bookTitle:
-		"Proceedings of VII Brazilian Symposium on Human Factors in Computing Systems",
-	abstract:
-		"Taking in account the social relevance of the terrestrial TV in Brazil and the transition to the digital technology - meaning new opportunities for exploring interactivity on TV - this paper is a worldwide review of HCI studies applied to interactive TV. Organizational semiotics artifacts are used in order to identify the main questions related to the interactive TV in the Brazil scene. The main design challenges are also pointed out by this study.",
-	keywords: ["human computer interaction", "digital interactive tv"],
-};
-
 export default function ArticlesFilter({
 	updateArticleList,
 	updateIsSearching,
+	renderNotification,
 }) {
 	const [filters, setFilters] = useState([]);
 	const [suggestions, setSuggestions] = useState([]);
@@ -34,7 +26,7 @@ export default function ArticlesFilter({
 	const [shouldRenderWarningMessage, setShouldRenderWarningMessage] =
 		useState(false);
 
-	const { searchKeywords } = useSearch();
+	const { searchKeywords, searchArticles } = useSearch();
 
 	async function fetchSuggestions(word) {
 		const a = await searchKeywords(word);
@@ -53,17 +45,24 @@ export default function ArticlesFilter({
 		setFilters(allFilters.filter((selectedFilter) => selectedFilter !== word));
 	}
 
-	function onSearchArticles() {
+	async function onSearchArticles() {
 		if (filters.length > 0) {
 			setShouldRenderWarningMessage(false);
 			setIsSearchingArticles(true);
 			updateIsSearching(true);
 			updateArticleList([]);
-			setTimeout(() => {
-				updateArticleList([exampleArticle]);
+			try {
+				const foundArticles = await searchArticles(filters);
+				updateArticleList(foundArticles);
 				setIsSearchingArticles(false);
 				updateIsSearching(false);
-			}, 2000);
+			} catch (e) {
+				renderNotification(
+					"error",
+					"Error",
+					"An error occurred while fetching articles. Please, try again."
+				);
+			}
 		} else {
 			setShouldRenderWarningMessage(true);
 		}
@@ -84,7 +83,7 @@ export default function ArticlesFilter({
 					<Column>
 						<TextInput
 							onChange={(e) => fetchSuggestions(e.target.value)}
-							placeholder="Type in a keyword to filter articles."
+							placeholder="Start typing to find keywords."
 						/>
 					</Column>
 				</Row>
