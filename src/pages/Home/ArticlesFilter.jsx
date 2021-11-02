@@ -8,6 +8,9 @@ import {
 	Button,
 	ButtonSkeleton,
 	InlineNotification,
+	FormGroup,
+	RadioButtonGroup,
+	RadioButton,
 } from "carbon-components-react";
 import { Search32 } from "@carbon/icons-react";
 import { Suggestions } from "../../components/index";
@@ -23,6 +26,7 @@ export default function ArticlesFilter({
 }) {
 	const [filters, setFilters] = useState([]);
 	const [suggestions, setSuggestions] = useState([]);
+	const [matchAllKeywords, setMatchAllKeywords] = useState(false);
 	const [isSearchingArticles, setIsSearchingArticles] = useState(false);
 	const [shouldRenderWarningMessage, setShouldRenderWarningMessage] =
 		useState(false);
@@ -53,7 +57,7 @@ export default function ArticlesFilter({
 			updateIsSearching(true);
 			updateArticleList([]);
 			try {
-				const foundArticles = await searchArticles(filters);
+				const foundArticles = await searchArticles(filters, matchAllKeywords);
 				updateArticleList(foundArticles.results);
 				updateTotalArticles(foundArticles.total);
 				setIsSearchingArticles(false);
@@ -64,6 +68,9 @@ export default function ArticlesFilter({
 					"Error",
 					"An error occurred while fetching articles. Please, try again."
 				);
+				setIsSearchingArticles(false);
+				updateIsSearching(false);
+				updateTotalArticles(0);
 			}
 		} else {
 			setShouldRenderWarningMessage(true);
@@ -117,9 +124,32 @@ export default function ArticlesFilter({
 						{isSearchingArticles ? (
 							<ButtonSkeleton />
 						) : (
-							<Button renderIcon={Search32} onClick={onSearchArticles}>
-								Find Articles
-							</Button>
+							<>
+								<FormGroup legendText="Find articles with...">
+									<RadioButtonGroup
+										defaultSelected="any"
+										legend="Group Legend"
+										name="radio-button-group"
+										valueSelected="default-selected"
+									>
+										<RadioButton
+											id="radio-1"
+											labelText="All selected keywords"
+											value="all"
+											onClick={() => setMatchAllKeywords(true)}
+										/>
+										<RadioButton
+											id="radio-2"
+											labelText="Any of the selected keywords"
+											value="any"
+											onClick={() => setMatchAllKeywords(false)}
+										/>
+									</RadioButtonGroup>
+								</FormGroup>
+								<Button renderIcon={Search32} onClick={onSearchArticles}>
+									Find Articles
+								</Button>
+							</>
 						)}
 
 						{shouldRenderWarningMessage ? (
