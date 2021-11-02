@@ -4,7 +4,7 @@ import "./article.scss";
 export default function Article({ article }) {
 	return (
 		<div className="article-container">
-			<span className="article-title">{article.booktitle}</span>
+			<span className="article-title">{article.title}</span>
 			<div className="article-subtopic">
 				<span className="article-subtitle">Abastract: </span>
 				<span className="article-subtitle-text">{article.abstract}</span>
