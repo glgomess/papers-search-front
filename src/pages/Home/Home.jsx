@@ -8,6 +8,7 @@ import "./home.scss";
 
 export default function Home() {
 	const [articles, setArticles] = useState([]);
+	const [totalArticles, setTotalArticles] = useState(0);
 	const [isSearching, setIsSearching] = useState(false);
 	const [shouldRenderNotification, setShouldRenderNotification] =
 		useState(false);
@@ -31,6 +32,7 @@ export default function Home() {
 						updateArticleList={setArticles}
 						updateIsSearching={setIsSearching}
 						renderNotification={renderNotification}
+						updateTotalArticles={setTotalArticles}
 					/>
 					{shouldRenderNotification ? (
 						<InlineNotification
@@ -40,6 +42,9 @@ export default function Home() {
 							onClose={() => setShouldRenderNotification(false)}
 						/>
 					) : null}
+					<span className="found-articles">
+						Total Articles Found: {totalArticles}
+					</span>
 					<div className="article-list">
 						{articles.map((art) => (
 							<Article article={art} />

@@ -18,6 +18,7 @@ import useSearch from "./hooks/useSearch";
 export default function ArticlesFilter({
 	updateArticleList,
 	updateIsSearching,
+	updateTotalArticles,
 	renderNotification,
 }) {
 	const [filters, setFilters] = useState([]);
@@ -53,7 +54,8 @@ export default function ArticlesFilter({
 			updateArticleList([]);
 			try {
 				const foundArticles = await searchArticles(filters);
-				updateArticleList(foundArticles);
+				updateArticleList(foundArticles.results);
+				updateTotalArticles(foundArticles.total);
 				setIsSearchingArticles(false);
 				updateIsSearching(false);
 			} catch (e) {
