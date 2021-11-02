@@ -12,7 +12,7 @@ import {
 	RadioButtonGroup,
 	RadioButton,
 } from "carbon-components-react";
-import { Search32 } from "@carbon/icons-react";
+import { Search32, Reset32 } from "@carbon/icons-react";
 import { Suggestions } from "../../components/index";
 import "./articles-filter.scss";
 // eslint-disable-next-line import/no-named-as-default
@@ -26,7 +26,7 @@ export default function ArticlesFilter({
 }) {
 	const [filters, setFilters] = useState([]);
 	const [suggestions, setSuggestions] = useState([]);
-	const [matchAllKeywords, setMatchAllKeywords] = useState(false);
+	const [matchAllKeywords, setMatchAllKeywords] = useState(true);
 	const [isSearchingArticles, setIsSearchingArticles] = useState(false);
 	const [shouldRenderWarningMessage, setShouldRenderWarningMessage] =
 		useState(false);
@@ -34,9 +34,9 @@ export default function ArticlesFilter({
 	const { searchKeywords, searchArticles } = useSearch();
 
 	async function fetchSuggestions(word) {
-		const a = await searchKeywords(word);
+		const suggestedKeywords = await searchKeywords(word);
 
-		setSuggestions(a);
+		setSuggestions(suggestedKeywords);
 	}
 
 	function onSelectKeywordSuggested(word) {
@@ -96,14 +96,17 @@ export default function ArticlesFilter({
 						/>
 					</Column>
 				</Row>
-				<Row>
-					<Column>
-						<Suggestions
-							suggestions={suggestions}
-							addSuggestion={onSelectKeywordSuggested}
-						/>
-					</Column>
-				</Row>
+				{suggestions.length > 0 ? (
+					<Row>
+						<Column>
+							<Suggestions
+								suggestions={suggestions}
+								addSuggestion={onSelectKeywordSuggested}
+							/>
+						</Column>
+					</Row>
+				) : null}
+
 				<Row className="row">
 					<Column>
 						{filters.map((filter) => (
@@ -121,33 +124,45 @@ export default function ArticlesFilter({
 				</Row>
 				<Row className="row">
 					<Column>
+						<FormGroup legendText="Find articles with...">
+							<RadioButtonGroup
+								defaultSelected="radio-1"
+								legend="Group Legend"
+								name="radio-button-group"
+								valueSelected="all"
+							>
+								<RadioButton
+									defaultChecked
+									id="all"
+									labelText="All selected keywords"
+									value="all"
+									onClick={() => setMatchAllKeywords(true)}
+								/>
+								<RadioButton
+									id="any"
+									labelText="Any of the selected keywords"
+									value="any"
+									onClick={() => setMatchAllKeywords(false)}
+								/>
+							</RadioButtonGroup>
+						</FormGroup>
 						{isSearchingArticles ? (
 							<ButtonSkeleton />
 						) : (
 							<>
-								<FormGroup legendText="Find articles with...">
-									<RadioButtonGroup
-										defaultSelected="any"
-										legend="Group Legend"
-										name="radio-button-group"
-										valueSelected="default-selected"
-									>
-										<RadioButton
-											id="radio-1"
-											labelText="All selected keywords"
-											value="all"
-											onClick={() => setMatchAllKeywords(true)}
-										/>
-										<RadioButton
-											id="radio-2"
-											labelText="Any of the selected keywords"
-											value="any"
-											onClick={() => setMatchAllKeywords(false)}
-										/>
-									</RadioButtonGroup>
-								</FormGroup>
-								<Button renderIcon={Search32} onClick={onSearchArticles}>
+								<Button
+									renderIcon={Search32}
+									onClick={onSearchArticles}
+									kind="secondary"
+								>
 									Find Articles
+								</Button>
+								<Button
+									renderIcon={Reset32}
+									onClick={() => setFilters([])}
+									kind="ghost"
+								>
+									Clear Inputs
 								</Button>
 							</>
 						)}
