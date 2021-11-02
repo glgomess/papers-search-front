@@ -14,7 +14,6 @@ $default-ibm-font: IBM Plex Sans;
 }
 
 .article-container:hover {
-	cursor: pointer;
 	transform: scale(1.01);
 	-webkit-transition: font-size 100ms linear;
 	-ms-transition: font-size 100ms linear;
@@ -50,6 +49,31 @@ $default-ibm-font: IBM Plex Sans;
 .article-subtitle-text {
 	font-family: $default-ibm-font;
 	font-size: 1rem;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.action-icon {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.action-icon:hover {
+	cursor: pointer;
+	transform: scale(1.2);
+	-webkit-transition: font-size 100ms linear;
+	-ms-transition: font-size 100ms linear;
+	transition: transform 100ms linear;
+}
+
+.action-icon:not(:hover) {
+	transform: scale(1);
+	transition: transform 100ms linear;
+	-webkit-transition: transform 100ms linear;
+	-ms-transition: transform 100ms linear;
 }
 
 @keyframes fadein {
