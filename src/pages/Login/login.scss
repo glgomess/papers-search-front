@@ -1,45 +1,53 @@
+$default-ibm-font: IBM Plex Sans;
+
 .background-gradient {
-  position: fixed;
-  background-image: linear-gradient(to top, rgb(56, 56, 56), white);
-  height: 100vh;
-  width: 100vw;
+	position: fixed;
+	background-image: linear-gradient(to top, rgb(56, 56, 56), white);
+	height: 100vh;
+	width: 100vw;
 }
 
 .title {
-  margin-top: 25px;
-  margin-bottom: 50px;
+	margin-top: 25px;
+	margin-bottom: 50px;
+	font-family: $default-ibm-font;
 }
 
 .form-title {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 40px;
+	display: flex;
+	justify-content: center;
+	font-family: $default-ibm-font;
+	margin-bottom: 40px;
 }
 
 .tile {
-  box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
+	box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
 }
 
 .recover-link {
-  margin-top: 15px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
+	margin-top: 15px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	font-family: $default-ibm-font;
 }
 
 .login-button {
-  margin-top: 20px;
-  margin-bottom: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	font-family: $default-ibm-font;
 }
 
 .new-account-link {
-  margin-top: 20px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: center;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	font-family: $default-ibm-font;
 }
 
 .error-message {
-  color: red;
-  margin-top: 20px;
+	color: red;
+	margin-top: 20px;
+	font-family: $default-ibm-font;
 }
