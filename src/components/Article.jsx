@@ -17,7 +17,7 @@ export default function Article({ article }) {
 		<div className="article-container">
 			<span className="article-title">{article.title}</span>
 			<div className="article-subtopic">
-				<span className="article-subtitle">Abastract: </span>
+				<span className="article-subtitle">Abstract: </span>
 				<span className="article-subtitle-text">{article.abstract}</span>
 			</div>
 			<div className="article-subtopic">
