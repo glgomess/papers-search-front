@@ -1,39 +1,42 @@
+$default-ibm-font: IBM Plex Sans;
+
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  background-color: #ffffff;
-  box-shadow: 2px 2px 2px #888888;
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
+	box-shadow: 2px 2px 2px #888888;
 }
 
 .suggested-kw {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  padding-left: 10px;
-  height: 30px;
-  font-size: 105%;
+	display: inline-flex;
+	align-items: center;
+	font-family: $default-ibm-font;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	padding-left: 10px;
+	height: 30px;
+	font-size: 105%;
 }
 
 .suggested-kw:hover {
-  cursor: pointer;
-  background-color: #f4f4f4;
-  font-size: 120%;
-  -webkit-transition: background-color 100ms linear;
-  -ms-transition: background-color 100ms linear;
-  transition: background-color 100ms linear;
-  -webkit-transition: font-size 100ms linear;
-  -ms-transition: font-size 100ms linear;
-  transition: font-size 100ms linear;
+	cursor: pointer;
+	background-color: #f4f4f4;
+	font-size: 120%;
+	-webkit-transition: background-color 100ms linear;
+	-ms-transition: background-color 100ms linear;
+	transition: background-color 100ms linear;
+	-webkit-transition: font-size 100ms linear;
+	-ms-transition: font-size 100ms linear;
+	transition: font-size 100ms linear;
 }
 
 .suggested-kw:not(:hover) {
-  background-color: #ffffff;
-  font-size: 105%;
-  -webkit-transition: background-color 100ms linear;
-  -ms-transition: background-color 100ms linear;
-  transition: background-color 100ms linear;
-  -webkit-transition: font-size 100ms linear;
-  -ms-transition: font-size 100ms linear;
-  transition: font-size 100ms linear;
+	background-color: #ffffff;
+	font-size: 105%;
+	-webkit-transition: background-color 100ms linear;
+	-ms-transition: background-color 100ms linear;
+	transition: background-color 100ms linear;
+	-webkit-transition: font-size 100ms linear;
+	-ms-transition: font-size 100ms linear;
+	transition: font-size 100ms linear;
 }
