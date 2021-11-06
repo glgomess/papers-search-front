@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Row, Column } from "carbon-components-react";
-import { Add32, View32 } from "@carbon/icons-react";
+import { BookmarkAdd32, View32, Close32 } from "@carbon/icons-react";
 import dotenv from "dotenv";
 import "./article.scss";
 
 dotenv.config();
 
-export default function Article({ article }) {
+export default function Article({
+	article,
+	addToReadingList,
+	removeFromReadingList,
+	isInReadingList = false,
+}) {
+	const [className, setClassName] = useState("");
+
+	/**
+	 * This hook is used to determine the CSS class of the outermost
+	 * container, so it doesn't do any animation whithin the Modal.
+	 */
+	useEffect(() => {
+		const cl = isInReadingList
+			? "simple-article-container"
+			: "article-container";
+		setClassName(cl);
+	});
+
 	async function redirectToDOI(doi) {
 		const url = `${process.env.REACT_APP_DEFAULT_DOI_URL}/${doi}`;
 		// eslint-disable-next-line no-undef
@@ -14,7 +32,7 @@ export default function Article({ article }) {
 	}
 
 	return (
-		<div className="article-container">
+		<div className={className}>
 			<span className="article-title">{article.title}</span>
 			<div className="article-subtopic">
 				<span className="article-subtitle">Abstract: </span>
@@ -30,7 +48,18 @@ export default function Article({ article }) {
 				<Grid>
 					<Row>
 						<Column className="actions">
-							<Add32 className="action-icon" />
+							{isInReadingList ? (
+								<Close32
+									className="action-icon"
+									onClick={() => removeFromReadingList(article)}
+								/>
+							) : (
+								<BookmarkAdd32
+									className="action-icon"
+									onClick={() => addToReadingList(article)}
+								/>
+							)}
+
 							<View32
 								className="action-icon"
 								onClick={() => redirectToDOI(article.doi)}
