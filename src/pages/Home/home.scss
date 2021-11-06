@@ -10,3 +10,9 @@ $default-ibm-font: IBM Plex Sans;
 	font-family: $default-ibm-font;
 	font-style: italic;
 }
+
+.row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
