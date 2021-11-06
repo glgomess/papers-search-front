@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Modal } from "carbon-components-react";
-import Article from "../Article";
+import Article from "../Article/Article";
 import "./readingList.scss";
 
 export default function ReadingList({
