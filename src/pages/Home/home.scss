@@ -1,3 +1,12 @@
+$default-ibm-font: IBM Plex Sans;
+
 .article-list {
 	margin-top: 40px;
+}
+
+.found-articles {
+	margin-top: 20px;
+	display: inline-block;
+	font-family: $default-ibm-font;
+	font-style: italic;
 }

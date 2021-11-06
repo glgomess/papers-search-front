@@ -9,9 +9,11 @@ export default function useSearch() {
 		return response.data;
 	}
 
-	async function searchArticles(filters) {
+	async function searchArticles(filters, matchAll) {
 		const response = await backendApi().get(
-			`/elastic/search/articles?keywords=${encodeURIComponent(filters)}`
+			`/elastic/search/articles?keywords=${encodeURIComponent(
+				filters
+			)}&matchAll=${matchAll}`
 		);
 
 		return response.data;

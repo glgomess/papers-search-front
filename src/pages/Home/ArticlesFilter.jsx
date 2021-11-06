@@ -8,8 +8,11 @@ import {
 	Button,
 	ButtonSkeleton,
 	InlineNotification,
+	FormGroup,
+	RadioButtonGroup,
+	RadioButton,
 } from "carbon-components-react";
-import { Search32 } from "@carbon/icons-react";
+import { Search32, Reset32 } from "@carbon/icons-react";
 import { Suggestions } from "../../components/index";
 import "./articles-filter.scss";
 // eslint-disable-next-line import/no-named-as-default
@@ -18,10 +21,12 @@ import useSearch from "./hooks/useSearch";
 export default function ArticlesFilter({
 	updateArticleList,
 	updateIsSearching,
+	updateTotalArticles,
 	renderNotification,
 }) {
 	const [filters, setFilters] = useState([]);
 	const [suggestions, setSuggestions] = useState([]);
+	const [matchAllKeywords, setMatchAllKeywords] = useState(true);
 	const [isSearchingArticles, setIsSearchingArticles] = useState(false);
 	const [shouldRenderWarningMessage, setShouldRenderWarningMessage] =
 		useState(false);
@@ -29,9 +34,9 @@ export default function ArticlesFilter({
 	const { searchKeywords, searchArticles } = useSearch();
 
 	async function fetchSuggestions(word) {
-		const a = await searchKeywords(word);
+		const suggestedKeywords = await searchKeywords(word);
 
-		setSuggestions(a);
+		setSuggestions(suggestedKeywords);
 	}
 
 	function onSelectKeywordSuggested(word) {
@@ -52,8 +57,9 @@ export default function ArticlesFilter({
 			updateIsSearching(true);
 			updateArticleList([]);
 			try {
-				const foundArticles = await searchArticles(filters);
-				updateArticleList(foundArticles);
+				const foundArticles = await searchArticles(filters, matchAllKeywords);
+				updateArticleList(foundArticles.results);
+				updateTotalArticles(foundArticles.total);
 				setIsSearchingArticles(false);
 				updateIsSearching(false);
 			} catch (e) {
@@ -62,6 +68,9 @@ export default function ArticlesFilter({
 					"Error",
 					"An error occurred while fetching articles. Please, try again."
 				);
+				setIsSearchingArticles(false);
+				updateIsSearching(false);
+				updateTotalArticles(0);
 			}
 		} else {
 			setShouldRenderWarningMessage(true);
@@ -87,14 +96,17 @@ export default function ArticlesFilter({
 						/>
 					</Column>
 				</Row>
-				<Row>
-					<Column>
-						<Suggestions
-							suggestions={suggestions}
-							addSuggestion={onSelectKeywordSuggested}
-						/>
-					</Column>
-				</Row>
+				{suggestions.length > 0 ? (
+					<Row>
+						<Column>
+							<Suggestions
+								suggestions={suggestions}
+								addSuggestion={onSelectKeywordSuggested}
+							/>
+						</Column>
+					</Row>
+				) : null}
+
 				<Row className="row">
 					<Column>
 						{filters.map((filter) => (
@@ -112,12 +124,47 @@ export default function ArticlesFilter({
 				</Row>
 				<Row className="row">
 					<Column>
+						<FormGroup legendText="Find articles with...">
+							<RadioButtonGroup
+								defaultSelected="radio-1"
+								legend="Group Legend"
+								name="radio-button-group"
+								valueSelected="all"
+							>
+								<RadioButton
+									defaultChecked
+									id="all"
+									labelText="All selected keywords"
+									value="all"
+									onClick={() => setMatchAllKeywords(true)}
+								/>
+								<RadioButton
+									id="any"
+									labelText="Any of the selected keywords"
+									value="any"
+									onClick={() => setMatchAllKeywords(false)}
+								/>
+							</RadioButtonGroup>
+						</FormGroup>
 						{isSearchingArticles ? (
 							<ButtonSkeleton />
 						) : (
-							<Button renderIcon={Search32} onClick={onSearchArticles}>
-								Find Articles
-							</Button>
+							<>
+								<Button
+									renderIcon={Search32}
+									onClick={onSearchArticles}
+									kind="secondary"
+								>
+									Find Articles
+								</Button>
+								<Button
+									renderIcon={Reset32}
+									onClick={() => setFilters([])}
+									kind="ghost"
+								>
+									Clear Inputs
+								</Button>
+							</>
 						)}
 
 						{shouldRenderWarningMessage ? (
