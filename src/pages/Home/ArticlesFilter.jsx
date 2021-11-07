@@ -239,7 +239,7 @@ export default function ArticlesFilter({
 					</Column>
 				</Row>
 				{relatedKeywords.length > 0 ? (
-					<Row className="row-2">
+					<Row className="row">
 						<Column>
 							<span className="subtitle">Related keywords: </span>
 							{relatedKeywords.map((kw, index) =>
