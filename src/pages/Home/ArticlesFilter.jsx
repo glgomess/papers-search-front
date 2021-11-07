@@ -166,9 +166,8 @@ export default function ArticlesFilter({
 					<Column>
 						<FormGroup legendText="Find articles with...">
 							<RadioButtonGroup
-								defaultSelected="radio-1"
 								legend="Group Legend"
-								name="radio-button-group"
+								name="keywords"
 								valueSelected="all"
 							>
 								<RadioButton
@@ -186,6 +185,10 @@ export default function ArticlesFilter({
 								/>
 							</RadioButtonGroup>
 						</FormGroup>
+					</Column>
+				</Row>
+				<Row>
+					<Column>
 						{isSearchingArticles ? (
 							<ButtonSkeleton />
 						) : (

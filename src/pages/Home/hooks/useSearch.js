@@ -17,11 +17,17 @@ export default function useSearch() {
 		return response.data;
 	}
 
-	async function searchArticles(keywordsFiltered, authorsFiltered, matchAll) {
+	async function searchArticles(
+		keywordsFiltered,
+		authorsFiltered,
+		matchKeywords
+	) {
 		const response = await backendApi().get(
 			`/elastic/search/articles?keywords=${encodeURIComponent(
 				keywordsFiltered
-			)}&authors=${encodeURIComponent(authorsFiltered)}&matchAll=${matchAll}`
+			)}&authors=${encodeURIComponent(
+				authorsFiltered
+			)}&matchKeywords=${matchKeywords}`
 		);
 
 		return response.data;
