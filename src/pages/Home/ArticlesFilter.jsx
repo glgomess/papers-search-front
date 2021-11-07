@@ -29,6 +29,7 @@ export default function ArticlesFilter({
 	const [keywordsSuggestions, setKeywordsSuggestions] = useState([]);
 	const [authorsSuggestions, setAuthorsSuggestions] = useState([]);
 	const [matchAllKeywords, setMatchAllKeywords] = useState(true);
+	const [relatedKeywords, setRelatedKeywords] = useState([]);
 	const [isSearchingArticles, setIsSearchingArticles] = useState(false);
 	const [shouldRenderWarningMessage, setShouldRenderWarningMessage] =
 		useState(false);
@@ -77,6 +78,7 @@ export default function ArticlesFilter({
 			setIsSearchingArticles(true);
 			updateIsSearching(true);
 			updateArticleList([]);
+			setRelatedKeywords([]);
 			try {
 				const foundArticles = await searchArticles(
 					keywordsFiltered,
@@ -85,6 +87,16 @@ export default function ArticlesFilter({
 				);
 				updateArticleList(foundArticles.results);
 				updateTotalArticles(foundArticles.total);
+
+				const rankArray = [];
+				for (let i = 0; i < foundArticles.keywordsRank.length; i += 1) {
+					const keywordFrequency = {
+						kw: foundArticles.keywordsRank[i][0],
+						freq: foundArticles.keywordsRank[i][1],
+					};
+					rankArray.push(keywordFrequency);
+				}
+				setRelatedKeywords(rankArray);
 				setIsSearchingArticles(false);
 				updateIsSearching(false);
 			} catch (e) {
@@ -226,6 +238,20 @@ export default function ArticlesFilter({
 						) : null}
 					</Column>
 				</Row>
+				{relatedKeywords.length > 0 ? (
+					<Row className="row">
+						<Column>
+							<span className="subtitle">Related keywords: </span>
+							{relatedKeywords.map((kw, index) =>
+								index === relatedKeywords.length ? (
+									<span className="related-kw">{kw.kw}.</span>
+								) : (
+									<span className="related-kw	">{kw.kw}, </span>
+								)
+							)}
+						</Column>
+					</Row>
+				) : null}
 			</Column>
 		</Tile>
 	);

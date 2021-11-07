@@ -4,3 +4,14 @@ $default-ibm-font: IBM Plex Sans;
 	margin-top: 20px;
 	font-family: $default-ibm-font;
 }
+
+.related-kw {
+	font-family: $default-ibm-font;
+	font-style: italic;
+	color: #161616;
+}
+
+.subtitle {
+	font-family: $default-ibm-font;
+	font-weight: 600;
+}
