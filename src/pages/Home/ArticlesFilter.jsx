@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
 	Row,
 	Column,
@@ -24,40 +24,65 @@ export default function ArticlesFilter({
 	updateTotalArticles,
 	renderNotification,
 }) {
-	const [filters, setFilters] = useState([]);
-	const [suggestions, setSuggestions] = useState([]);
+	const [keywordsFiltered, setKeywordsFiltered] = useState([]);
+	const [authorsFiltered, setAuthorsFiltered] = useState([]);
+	const [keywordsSuggestions, setKeywordsSuggestions] = useState([]);
+	const [authorsSuggestions, setAuthorsSuggestions] = useState([]);
 	const [matchAllKeywords, setMatchAllKeywords] = useState(true);
 	const [isSearchingArticles, setIsSearchingArticles] = useState(false);
 	const [shouldRenderWarningMessage, setShouldRenderWarningMessage] =
 		useState(false);
 
-	const { searchKeywords, searchArticles } = useSearch();
+	const { searchKeywords, searchArticles, searchAuthors } = useSearch();
 
-	async function fetchSuggestions(word) {
+	async function fetchKeywordsSuggestions(word) {
 		const suggestedKeywords = await searchKeywords(word);
 
-		setSuggestions(suggestedKeywords);
+		setKeywordsSuggestions(suggestedKeywords);
+	}
+
+	async function fetchAuthorsSuggestions(word) {
+		const suggestedAuthors = await searchAuthors(word);
+
+		setAuthorsSuggestions(suggestedAuthors);
 	}
 
 	function onSelectKeywordSuggested(word) {
-		if (!filters.includes(word)) {
-			setFilters([...filters, word]);
+		if (!keywordsFiltered.includes(word)) {
+			setKeywordsFiltered([...keywordsFiltered, word]);
+		}
+	}
+
+	function onSelectAuthorSuggested(word) {
+		if (!authorsFiltered.includes(word)) {
+			setAuthorsFiltered([...authorsFiltered, word]);
 		}
 	}
 
 	function onRemoveKeyword(word) {
-		const allFilters = [...filters];
-		setFilters(allFilters.filter((selectedFilter) => selectedFilter !== word));
+		setKeywordsFiltered(
+			keywordsFiltered.filter((selectedFilter) => selectedFilter !== word)
+		);
+	}
+
+	function onRemoveAuthor(word) {
+		setAuthorsFiltered(
+			authorsFiltered.filter((selectedFilter) => selectedFilter !== word)
+		);
 	}
 
 	async function onSearchArticles() {
-		if (filters.length > 0) {
+		if (authorsFiltered.length > 0 || keywordsFiltered.length > 0) {
 			setShouldRenderWarningMessage(false);
 			setIsSearchingArticles(true);
 			updateIsSearching(true);
 			updateArticleList([]);
 			try {
-				const foundArticles = await searchArticles(filters, matchAllKeywords);
+				const foundArticles = await searchArticles(
+					keywordsFiltered,
+					authorsFiltered,
+					matchAllKeywords
+				);
 				updateArticleList(foundArticles.results);
 				updateTotalArticles(foundArticles.total);
 				setIsSearchingArticles(false);
@@ -77,10 +102,6 @@ export default function ArticlesFilter({
 		}
 	}
 
-	useEffect(() => {
-		// Fetch new articles
-	}, [filters]);
-
 	return (
 		<Tile>
 			<Column>
@@ -91,30 +112,49 @@ export default function ArticlesFilter({
 				<Row className="row">
 					<Column>
 						<TextInput
-							onChange={(e) => fetchSuggestions(e.target.value)}
+							onChange={(e) => fetchKeywordsSuggestions(e.target.value)}
 							placeholder="Start typing to find keywords."
 						/>
-					</Column>
-				</Row>
-				{suggestions.length > 0 ? (
-					<Row>
-						<Column>
+						{keywordsSuggestions.length > 0 ? (
 							<Suggestions
-								suggestions={suggestions}
+								suggestions={keywordsSuggestions}
 								addSuggestion={onSelectKeywordSuggested}
 							/>
-						</Column>
-					</Row>
-				) : null}
+						) : null}
+					</Column>
+					<Column>
+						<TextInput
+							onChange={(e) => fetchAuthorsSuggestions(e.target.value)}
+							placeholder="Start typing to find authors."
+						/>
+						{authorsSuggestions.length > 0 ? (
+							<Suggestions
+								suggestions={authorsSuggestions}
+								addSuggestion={onSelectAuthorSuggested}
+							/>
+						) : null}
+					</Column>
+				</Row>
 
 				<Row className="row">
 					<Column>
-						{filters.map((filter) => (
+						{keywordsFiltered.map((filter) => (
 							<Tag
 								type="cool-gray"
 								title={filter}
 								filter
 								onClose={() => onRemoveKeyword(filter)}
+							>
+								{" "}
+								{filter}
+							</Tag>
+						))}
+						{authorsFiltered.map((filter) => (
+							<Tag
+								type="blue"
+								title={filter}
+								filter
+								onClose={() => onRemoveAuthor(filter)}
 							>
 								{" "}
 								{filter}
@@ -126,9 +166,8 @@ export default function ArticlesFilter({
 					<Column>
 						<FormGroup legendText="Find articles with...">
 							<RadioButtonGroup
-								defaultSelected="radio-1"
 								legend="Group Legend"
-								name="radio-button-group"
+								name="keywords"
 								valueSelected="all"
 							>
 								<RadioButton
@@ -146,6 +185,10 @@ export default function ArticlesFilter({
 								/>
 							</RadioButtonGroup>
 						</FormGroup>
+					</Column>
+				</Row>
+				<Row>
+					<Column>
 						{isSearchingArticles ? (
 							<ButtonSkeleton />
 						) : (
@@ -159,7 +202,10 @@ export default function ArticlesFilter({
 								</Button>
 								<Button
 									renderIcon={Reset32}
-									onClick={() => setFilters([])}
+									onClick={() => {
+										setAuthorsFiltered([]);
+										setKeywordsFiltered([]);
+									}}
 									kind="ghost"
 								>
 									Clear Inputs

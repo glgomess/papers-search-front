@@ -9,11 +9,25 @@ export default function useSearch() {
 		return response.data;
 	}
 
-	async function searchArticles(filters, matchAll) {
+	async function searchAuthors(word) {
+		const response = await backendApi().get(
+			`/elastic/search/authors?author=${word}`
+		);
+
+		return response.data;
+	}
+
+	async function searchArticles(
+		keywordsFiltered,
+		authorsFiltered,
+		matchKeywords
+	) {
 		const response = await backendApi().get(
 			`/elastic/search/articles?keywords=${encodeURIComponent(
-				filters
-			)}&matchAll=${matchAll}`
+				keywordsFiltered
+			)}&authors=${encodeURIComponent(
+				authorsFiltered
+			)}&matchKeywords=${matchKeywords}`
 		);
 
 		return response.data;
@@ -22,5 +36,6 @@ export default function useSearch() {
 	return {
 		searchKeywords,
 		searchArticles,
+		searchAuthors,
 	};
 }
